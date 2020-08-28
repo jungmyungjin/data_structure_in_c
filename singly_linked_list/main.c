@@ -9,49 +9,46 @@ typedef struct s_node
 
 t_node *list_create(int data)
 {
-    t_node new_node;
-    t_node *node_address;
+    t_node *new_node = (t_node*) malloc(sizeof(t_node));
 
-    new_node.data = data;
-    new_node.next = NULL;
-    node_address = &new_node;
-    return (node_address);
+    new_node->data = data;
+    new_node->next = NULL;
+
+    return (new_node);
 }
 
-int list_append(t_node **begin_list, int data)
+int list_append(t_node *begin_list, int data)
 {
-    t_node new_node;
+    t_node *new_node = list_create(data);
+    t_node *last_node;
     int index = 1;
-
-    // data to be appended
-    new_node.data = data;
-    new_node.next = NULL;
-
-    // change existing list address
-    (*begin_list)->next = &new_node;
-
-    printf("old address2 : %p\n", (*begin_list)->next->next);
-    printf("new address2 : %p\n", new_node.next);
+   
+    last_node = begin_list;
+    while(last_node->next != NULL)
+    {
+        last_node = last_node->next;
+    }
+    last_node->next = new_node;
 
     return (index);
 }
 
 int list_size(t_node *begin_list)
 {
-    int index;
+    int size;
 
-    index = 0;
-    if (begin_list->data)
+    size = 1;
+    if (begin_list == NULL)
     {
-        index = 1;
-        while(begin_list->next != NULL)
-        {
-            printf("data : %d\n",begin_list->data);
-            begin_list = begin_list->next;
-            index++;
-        }
+        return (0);
     }
-    return (index);
+    while (begin_list->next != NULL)
+    {
+        printf("data : %d\n",begin_list->data);
+        begin_list = begin_list->next;
+        size++;
+    }
+    return (size);
 }
 
 int main(void)
@@ -61,11 +58,12 @@ int main(void)
     my_list = list_create(5);
     printf("create : %d\n",my_list->data);
 
-    list_append(&my_list, 1);
+    printf("befor address : %p\n",my_list);
+    list_append(my_list, 1);
     printf("append : %d\n",my_list->next->data);
-    printf("last address : %p\n",my_list->next->next);
+    printf("after address : %p\n",my_list);
 
-    //printf("list size = %d\n",list_size(my_list));
+    printf("list size = %d\n",list_size(my_list));
 
     return (0);
 }
