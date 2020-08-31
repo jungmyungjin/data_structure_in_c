@@ -17,7 +17,7 @@ t_node *list_create(int data)
     return (new_node);
 }
 
-int list_append(t_node **begin_list, int data)
+int list_append(t_node *begin_list, int data)
 {
     t_node *new_node;
     t_node *last_node;
@@ -29,7 +29,7 @@ int list_append(t_node **begin_list, int data)
         return (-1);
     }
     new_node = list_create(data);
-    last_node = *begin_list;
+    last_node = begin_list;
     while(last_node->next != NULL)
     {
         last_node = last_node->next;
@@ -96,7 +96,7 @@ int list_find(t_node *begin_list, int data)
     return (-1);
 }
 
-int list_remove(t_node **begin_list, int n)
+int list_remove(t_node *begin_list, int n)
 {
     int index;
     t_node *previous_node;
@@ -104,7 +104,7 @@ int list_remove(t_node **begin_list, int n)
     t_node *next_node;
 
     index = 0;
-    current_node = *begin_list;
+    current_node = begin_list;
     while(current_node != NULL && index < n)
     {
         previous_node = current_node;
@@ -118,7 +118,7 @@ int list_remove(t_node **begin_list, int n)
         // target is first node
         if (n == 0)
         {
-         *begin_list = next_node;
+         begin_list = next_node;
          free(current_node);
         }
         // target is last node
@@ -138,7 +138,7 @@ int list_remove(t_node **begin_list, int n)
     return (0);
 }
 
-int list_insert(t_node **begin_list, int data, int n)
+int list_insert(t_node *begin_list, int data, int n)
 {
     int index;
     t_node *previous_node;
@@ -149,7 +149,7 @@ int list_insert(t_node **begin_list, int data, int n)
         return (-1);
     new_node = list_create(data);
     index = 0;
-    current_node = *begin_list;
+    current_node = begin_list;
     while(current_node != NULL && index < n)
     {
         previous_node = current_node;
@@ -159,8 +159,8 @@ int list_insert(t_node **begin_list, int data, int n)
     // target is first node
     if (n == 0)
     {
-        new_node->next = (*begin_list)->next;
-        *begin_list = new_node;
+        new_node->next = begin_list->next;
+        begin_list = new_node;
     }
     // target is last node
     else if(index < n)
@@ -199,22 +199,22 @@ int main(void)
     my_list = list_create(5);
     show_list(my_list);
 
-    list_append(&my_list, 1);
+    list_append(my_list, 1);
     show_list(my_list);
 
     printf("list size = %d\n",list_size(my_list));
 
     printf("list_get(0) data = %d\n",list_get(my_list, 0)->data);
 
-    list_append(&my_list, 3);
+    list_append(my_list, 3);
 
     printf("list_find(1) index = %d\n",list_find(my_list, 1));
     show_list(my_list);
 
-    printf("list_remove(1) result = %d\n",list_remove(&my_list, 1));
+    printf("list_remove(1) result = %d\n",list_remove(my_list, 1));
     show_list(my_list);
 
-    list_insert(&my_list, 7, 1);
+    list_insert(my_list, 7, 1);
     show_list(my_list);
 
     return (0);
